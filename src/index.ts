@@ -6,7 +6,7 @@ import { GameQueryModel } from './models/GameQueryModel'
 import { GameViewModel } from './models/GameViewModel'
 import { URIParamsModel } from './models/URIParamsModel'
 export const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3030
 
 const jsonBodyMiddleware = express.json()
 app.use(jsonBodyMiddleware)
