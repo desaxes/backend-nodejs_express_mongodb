@@ -1,9 +1,22 @@
-import express from 'express'
-const app = express()
-const port = process.env.PORT || 3003
+import express, { Response } from 'express'
+import { RequestWithBody, RequestWithParams, RequestWithParamsBody, RequestWithQuery } from './types'
+import { GameCreateModel } from './models/GameCreateModel'
+import { GameUpdateModel } from './models/GameUpdateModel'
+import { GameQueryModel } from './models/GameQueryModel'
+import { GameViewModel } from './models/GameViewModel'
+import { URIParamsModel } from './models/URIParamsModel'
+export const app = express()
+const port = process.env.PORT || 3000
 
 const jsonBodyMiddleware = express.json()
 app.use(jsonBodyMiddleware)
+
+export type game = {
+    id: number, title: string, genre: string, year: string
+}
+type dbType = {
+    games: game[]
+}
 
 enum StatusCodes {
     OK = 200,
@@ -13,10 +26,7 @@ enum StatusCodes {
     NOT_FOUND = 404
 }
 
-type dbType = {
-    games: { id: number, title: string, genre: string, year: string }[]
-}
-const db: dbType = {
+export const db: dbType = {
     games: [
         { id: 1, title: 'Witcher', genre: 'Rpg', year: '2007' },
         { id: 2, title: 'Witcher 2', genre: 'Rpg', year: '2011' },
@@ -44,6 +54,27 @@ const db: dbType = {
         { id: 24, title: 'Mass Effect', genre: 'ARpg', year: '2007' },
         { id: 25, title: 'Mass Effect 2', genre: 'ARpg', year: '2010' },
         { id: 26, title: 'Mass Effect 3', genre: 'ARpg', year: '2012' },
+        { id: 27, title: 'NieR:Automata', genre: 'ARpg', year: '2017' },
+        { id: 28, title: 'Final Fantasy VII Remake', genre: 'ARpg', year: '2020' },
+        { id: 29, title: 'Life is Strange', genre: 'Interactive Movie', year: '2015' },
+        { id: 30, title: 'Life is Strange: Before the Storm', genre: 'Interactive Movie', year: '2017' },
+        { id: 31, title: 'Life is Strange 2', genre: 'Interactive Movie', year: '2018' },
+        { id: 32, title: 'Life is Strange: True Colors', genre: 'Interactive Movie', year: '2021' },
+        { id: 33, title: 'Dead Island', genre: 'ARpg', year: '2011' },
+        { id: 34, title: 'Dead Island 2', genre: 'ARpg', year: '2023' },
+        { id: 35, title: 'Heavy Rain', genre: 'Interactive Movie', year: '2010' },
+        { id: 36, title: 'Dying Light', genre: 'Survival horror', year: '2015' },
+        { id: 37, title: 'Dying Light 2: Stay Human', genre: 'Survival horror', year: '2022' },
+        { id: 38, title: 'Horizon Zero Dawn', genre: 'ARpg', year: '2015' },
+        { id: 39, title: 'Horizon Forbidden West', genre: 'ARpg', year: '2022' },
+        { id: 40, title: 'Disco Elysium', genre: 'Rpg', year: '2019' },
+        { id: 41, title: 'Resident Evil 7', genre: 'Survival horror', year: '2017' },
+        { id: 42, title: 'Resident Evil:Village', genre: 'Survival horror', year: '2021' },
+        { id: 43, title: 'Control', genre: 'Action', year: '2019' },
+        { id: 44, title: 'Dragon Age:Origins', genre: 'Rpg', year: '2009' },
+        { id: 45, title: 'Dragon Age 2', genre: 'Rpg', year: '2011' },
+        { id: 46, title: 'Dragon Age:Inquisition', genre: 'Rpg', year: '2014' },
+        { id: 47, title: 'Elden Ring', genre: 'ARpg', year: '2022' },
     ]
 }
 
@@ -51,22 +82,30 @@ app.get('/', (req, res) => {
     res.send(
         'Hell')
 })
-app.get('/games', (req, res) => {
-    let foundedGames = db.games
-    if (req.query.year) {
-        foundedGames = foundedGames.filter(g => g.year === req.query.year)
-    }
-    if (req.query.genre) {
-        foundedGames = foundedGames.filter(g => g.genre === req.query.genre)
-    }
-    if (req.query.title) {
-        foundedGames = foundedGames.filter(
-            g => g.title.toLowerCase().indexOf(
-                (req.query.title as string).toLowerCase()) > -1)
-    }
-    res.json(foundedGames)
-})
-app.get('/games/:id', (req, res) => {
+app.get('/games',
+    (req: RequestWithQuery<GameQueryModel>, res: Response<GameViewModel[]>) => {
+        let foundedGames = db.games
+        if (req.query.year) {
+            foundedGames = foundedGames.filter(g => g.year === req.query.year)
+        }
+        if (req.query.genre) {
+            foundedGames = foundedGames.filter(g => g.genre === req.query.genre)
+        }
+        if (req.query.title) {
+            foundedGames = foundedGames.filter(
+                g => g.title.toLowerCase().indexOf(
+                    (req.query.title as string).toLowerCase()) > -1)
+        }
+        res.json(foundedGames.map(game => {
+            return {
+                id: game.id,
+                title: game.title,
+                genre: game.genre,
+                year: game.year
+            }
+        }))
+    })
+app.get('/games/:id', (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel>) => {
     const foundedGame = db.games.find(g => g.id === +req.params.id)
     if (!foundedGame) {
         res.sendStatus(StatusCodes.NOT_FOUND)
@@ -74,8 +113,7 @@ app.get('/games/:id', (req, res) => {
     }
     res.json(foundedGame)
 })
-
-app.post('/games', (req, res) => {
+app.post('/games', (req: RequestWithBody<GameCreateModel>, res: Response<GameViewModel>) => {
     if (!req.body.title || !req.body.genre || !req.body.year) {
         res.sendStatus(StatusCodes.BAD_REQUEST)
         return
@@ -89,7 +127,7 @@ app.post('/games', (req, res) => {
     db.games.push(game)
     res.status(StatusCodes.CREATED).json(game)
 })
-app.delete('/games/:id', (req, res) => {
+app.delete('/games/:id', (req: RequestWithParams<URIParamsModel>, res) => {
     const foundedIndex = db.games.findIndex(g => g.id === +req.params.id)
     if (foundedIndex === -1) {
         res.sendStatus(StatusCodes.NOT_FOUND)
@@ -98,9 +136,10 @@ app.delete('/games/:id', (req, res) => {
     db.games.splice(foundedIndex, 1)
     res.sendStatus(StatusCodes.NO_CONTENT)
 })
-app.put('/games/:id', (req, res) => {
+app.put('/games/:id', (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>,
+    res: Response<GameViewModel>) => {
     const foundedGame = db.games.find(g => g.id === +req.params.id)
-    if (!foundedGame) {
+    if (!foundedGame || !req.params.id) {
         res.sendStatus(StatusCodes.NOT_FOUND)
         return
     }
@@ -113,9 +152,8 @@ app.put('/games/:id', (req, res) => {
         res.sendStatus(StatusCodes.BAD_REQUEST)
         return
     }
-    res.json(foundedGame)
+    res.status(StatusCodes.OK).json(foundedGame)
 })
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 }) 
