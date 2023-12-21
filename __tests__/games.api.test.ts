@@ -1,6 +1,7 @@
 import request from 'supertest'
-import { app, db } from '../src';
+import { app } from '../src/app';
 import { GameCreateModel } from '../src/models/GameCreateModel';
+import { db } from '../src/db';
 const server = request(app)
 
 const yGames = db.games.filter(e => e.year === '2020')
@@ -11,14 +12,12 @@ const game = {
     year: '2018'
 }
 
-
 describe('games', () => {
 
     it('should return 200 & array of games', async () => {
         await server
             .get('/games')
             .expect(200, db.games)
-
     });
     it('should return 200 & game with id=5', async () => {
         await server

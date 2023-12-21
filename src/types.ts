@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express'
-
-export type RequestWithBody<T> = Request<{}, {}, T>
-export type RequestWithQuery<T> = Request<{}, {}, {}, T>
-export type RequestWithParams<T> = Request<T>
-export type RequestWithParamsBody<T, B> = Request<T, {}, B>
+export type game = {
+    id: number, title: string, genre: string, year: string
+}
+export type dbType = {
+    games: game[]
+}
