@@ -6,61 +6,99 @@ import { GameQueryModel } from '../models/GameQueryModel'
 import { GameViewModel } from '../models/GameViewModel'
 import { URIParamsModel } from '../models/URIParamsModel'
 import { StatusCodes } from '../StatusCodes'
-import { dbType } from '../types'
-import { gamesRepository } from '../repositories/games-repository'
 import { inputValidationMiddleware } from '../middlewares/input-validation'
 import { bodyValidationMiddleware } from '../middlewares/game-body-validation'
 import { idValidationMiddleware } from '../middlewares/id-validation'
+import { authMiddleware } from '../middlewares/auth-validation'
+import { app } from '../app'
+import { gamesRepository } from '../repositories/games-repository'
 
-export const getGamesRouter = (db: dbType) => {
+export const getGamesRouter = () => {
     const router = express.Router()
     router.get('/',
-        (req: RequestWithQuery<GameQueryModel>, res: Response<GameViewModel[]>) => {
-            res.json(gamesRepository.findByTerm(req.query.year, req.query.genre, req.query.title).map(game => {
-                return {
-                    id: game.id,
-                    title: game.title,
-                    genre: game.genre,
-                    year: game.year
-                }
-            }))
+        async (req: RequestWithQuery<GameQueryModel>, res: Response<GameViewModel[]>) => {
+            const collection = app.locals.collection
+            try {
+                const games = await collection.find({}).toArray()
+                let sortGames = gamesRepository.findByTerm(games, req.query.year, req.query.genre, req.query.title)
+                res.json(sortGames).status(200)
+            }
+            catch (e) {
+                res.sendStatus(500)
+            }
+
         })
-    router.get('/:id', (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel>) => {
-        const foundedGame = gamesRepository.findById(+req.params.id)
-        if (!foundedGame) {
-            res.sendStatus(StatusCodes.NOT_FOUND)
-            return
-        }
-        res.json(foundedGame)
-    })
+    router.get('/:id',
+        async (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel>) => {
+            const collection = app.locals.collection
+            try {
+                const game = await collection.findOne({ id: parseInt(req.params.id) })
+                res.json(game).status(200)
+            }
+            catch (e) {
+                res.sendStatus(StatusCodes.NOT_FOUND)
+            }
+        })
     router.post('/',
+        authMiddleware,
         bodyValidationMiddleware,
         inputValidationMiddleware,
-        (req: RequestWithBody<GameCreateModel>, res: Response<GameViewModel>) => {
-            const newGame = gamesRepository.createNewGame(req.body.title, req.body.genre, req.body.year)
-            res.status(StatusCodes.CREATED).json(newGame)
+        async (req: RequestWithBody<GameCreateModel>, res: Response<GameViewModel>) => {
+            const collection = app.locals.collection
+            try {
+                const games = await collection.find({}).toArray()
+                let lastId = games[games.length - 1].id + 1
+
+                const newGame = await collection.insertOne(
+                    {
+                        id: lastId,
+                        title: req.body.title,
+                        genre: req.body.genre,
+                        year: req.body.year
+                    })
+                res.status(StatusCodes.CREATED).json(newGame)
+            }
+            catch (e) {
+                res.status(StatusCodes.BAD_REQUEST)
+            }
         })
     router.delete('/:id',
+        authMiddleware,
         idValidationMiddleware,
-        (req: RequestWithParams<URIParamsModel>, res: Response<{}>) => {
-            const deleteGame = gamesRepository.deleteGame(req.params.id)
-            if (!deleteGame) {
-                res.sendStatus(StatusCodes.NOT_FOUND)
-                return
+        inputValidationMiddleware,
+        async (req: RequestWithParams<URIParamsModel>, res: Response<{}>) => {
+            const collection = app.locals.collection
+            try {
+                await collection.deleteOne({ id: parseInt(req.params.id) })
+                res.sendStatus(StatusCodes.NO_CONTENT)
             }
-            res.sendStatus(StatusCodes.NO_CONTENT)
+            catch (e) {
+                res.sendStatus(StatusCodes.NOT_FOUND)
+            }
         })
     router.put('/:id',
         idValidationMiddleware,
+        authMiddleware,
         bodyValidationMiddleware,
         inputValidationMiddleware,
-        (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>, res: Response<GameViewModel>) => {
-            const gameUpdate = gamesRepository.updateGame(req.params.id, req.body.title, req.body.genre, req.body.year)
-            if (!gameUpdate) {
-                return res.sendStatus(StatusCodes.NOT_FOUND)
+        async (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>, res: Response<GameViewModel>) => {
+            const collection = app.locals.collection
+            try {
+                const updateGame = await collection.updateOne({ id: parseInt(req.params.id) },
+                    {
+                        $set: {
+                            title: req.body.title,
+                            genre: req.body.genre,
+                            year: req.body.year
+                        }
+                    }
+                )
+                res.json(updateGame).status(StatusCodes.NOT_FOUND)
             }
-            const game = gamesRepository.findById(+req.params.id)
-            res.status(StatusCodes.OK).json(game)
+            catch (e) {
+                console.log(e)
+                res.sendStatus(400)
+            }
         })
     return router
 }

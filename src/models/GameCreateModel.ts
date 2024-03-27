@@ -1,4 +1,5 @@
 export type GameCreateModel = {
+    id:number,
     /**
      * Game title
      */
@@ -10,5 +11,5 @@ export type GameCreateModel = {
         /**
      * Game year
      */
-    year: string
+    year: number
 }

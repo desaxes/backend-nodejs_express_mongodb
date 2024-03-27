@@ -16,6 +16,6 @@ export type GameViewModel = {
    /**
 * Game year
 */
-   year: string
+   year: number
 
 }

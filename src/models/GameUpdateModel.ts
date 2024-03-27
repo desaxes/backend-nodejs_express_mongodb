@@ -10,5 +10,5 @@ export type GameUpdateModel = {
         /**
      * Game year
      */
-    year: string
+    year: number
 }
