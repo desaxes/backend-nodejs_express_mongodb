@@ -10,29 +10,25 @@ import { inputValidationMiddleware } from '../middlewares/input-validation'
 import { bodyValidationMiddleware } from '../middlewares/game-body-validation'
 import { idValidationMiddleware } from '../middlewares/id-validation'
 import { authMiddleware } from '../middlewares/auth-validation'
-import { app } from '../app'
-import { gamesRepository } from '../repositories/games-repository'
+import { gamesService } from '../domain/games-service'
+import { InsertOneResult, UpdateResult, WithId } from 'mongodb'
 
 export const getGamesRouter = () => {
     const router = express.Router()
     router.get('/',
-        async (req: RequestWithQuery<GameQueryModel>, res: Response<GameViewModel[]>) => {
-            const collection = app.locals.collection
+        async (req: RequestWithQuery<GameQueryModel>, res: Response<any>) => {
             try {
-                const games = await collection.find({}).toArray()
-                let sortGames = gamesRepository.findByTerm(games, req.query.year, req.query.genre, req.query.title)
-                res.json(sortGames).status(200)
+                let games = await gamesService.getGames(req.query.year, req.query.genre, req.query.title, req.query.limit, req.query.page)
+                res.json(games).status(200)
             }
             catch (e) {
                 res.sendStatus(500)
             }
-
         })
     router.get('/:id',
-        async (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel>) => {
-            const collection = app.locals.collection
+        async (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel|{}>) => {
             try {
-                const game = await collection.findOne({ id: parseInt(req.params.id) })
+                const game = await gamesService.getGameById(req.params.id)
                 res.json(game).status(200)
             }
             catch (e) {
@@ -43,19 +39,9 @@ export const getGamesRouter = () => {
         authMiddleware,
         bodyValidationMiddleware,
         inputValidationMiddleware,
-        async (req: RequestWithBody<GameCreateModel>, res: Response<GameViewModel>) => {
-            const collection = app.locals.collection
+        async (req: RequestWithBody<GameCreateModel>, res: Response<InsertOneResult>) => {
             try {
-                const games = await collection.find({}).toArray()
-                let lastId = games[games.length - 1].id + 1
-
-                const newGame = await collection.insertOne(
-                    {
-                        id: lastId,
-                        title: req.body.title,
-                        genre: req.body.genre,
-                        year: req.body.year
-                    })
+                const newGame = await gamesService.createGame(req.body.title, req.body.genre, req.body.year)
                 res.status(StatusCodes.CREATED).json(newGame)
             }
             catch (e) {
@@ -67,9 +53,8 @@ export const getGamesRouter = () => {
         idValidationMiddleware,
         inputValidationMiddleware,
         async (req: RequestWithParams<URIParamsModel>, res: Response<{}>) => {
-            const collection = app.locals.collection
             try {
-                await collection.deleteOne({ id: parseInt(req.params.id) })
+                await gamesService.removeGame(req.params.id)
                 res.sendStatus(StatusCodes.NO_CONTENT)
             }
             catch (e) {
@@ -81,19 +66,10 @@ export const getGamesRouter = () => {
         authMiddleware,
         bodyValidationMiddleware,
         inputValidationMiddleware,
-        async (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>, res: Response<GameViewModel>) => {
-            const collection = app.locals.collection
+        async (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>, res: Response<UpdateResult>) => {
             try {
-                const updateGame = await collection.updateOne({ id: parseInt(req.params.id) },
-                    {
-                        $set: {
-                            title: req.body.title,
-                            genre: req.body.genre,
-                            year: req.body.year
-                        }
-                    }
-                )
-                res.json(updateGame).status(StatusCodes.NOT_FOUND)
+                const updateGame = await gamesService.updateGame(req.params.id, req.body.title, req.body.genre, req.body.year)
+                res.json(updateGame).status(StatusCodes.OK)
             }
             catch (e) {
                 console.log(e)

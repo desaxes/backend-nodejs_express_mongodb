@@ -3,12 +3,20 @@ export type GameQueryModel = {
      * @query Game title
      */
     title?: string,
-        /**
-     * @query Game genre
-     */
+    /**
+ * @query Game genre
+ */
     genre?: string,
-        /**
-     * @query Game year
-     */
-    year?: string
+    /**
+ * @query Game year
+ */
+    year?: string,
+    /**
+ * @query elem limit
+ */
+    limit?: string,
+    /**
+ * @query page
+ */
+    page?: string
 }

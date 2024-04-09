@@ -2,12 +2,8 @@ import { Result, ValidationError } from "express-validator"
 
 export type GameViewModel = {
    /**
-    * Game id
-    */
-   id: number
-   /**
-    * Game title
-    */
+      * Game title
+      */
    title: string,
    /**
 * Game genre
@@ -17,5 +13,9 @@ export type GameViewModel = {
 * Game year
 */
    year: number
+   /**
+* Developer ID
+*/
+   developer: string
 
 }

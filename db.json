@@ -3,282 +3,329 @@
         "id": 1,
         "title": "Witcher",
         "genre": "Rpg",
-        "year": 2007
+        "year": 2007,
+        "developerId":2
     },
     {
         "id": 2,
         "title": "Witcher 2",
         "genre": "Rpg",
-        "year": 2011
+        "year": 2011,
+        "developerId":2
     },
     {
         "id": 3,
         "title": "Witcher 3",
         "genre": "ARpg",
-        "year": 2015
+        "year": 2015,
+        "developerId":2
     },
     {
         "id": 4,
         "title": "Cyberpunk",
         "genre": "ARpg",
-        "year": 2020
+        "year": 2020,
+        "developerId":2
     },
     {
         "id": 5,
         "title": "Gothic",
         "genre": "Rpg",
-        "year": 2001
+        "year": 2001,
+        "developerId":1
     },
     {
         "id": 6,
         "title": "Gothic 2",
         "genre": "Rpg",
-        "year": 2002
+        "year": 2002,
+        "developerId":1
     },
     {
         "id": 7,
         "title": "Tyranny",
         "genre": "CRpg",
-        "year": 2016
+        "year": 2016,
+        "developerId":3
     },
     {
         "id": 8,
         "title": "Baldurs Gate 3",
         "genre": "CRpg",
-        "year": 2023
+        "year": 2023,
+        "developerId":4
     },
     {
         "id": 9,
         "title": "Resident Evil 2 Remake",
         "genre": "Survival Horror",
-        "year": 2019
+        "year": 2019,
+        "developerId":5
     },
     {
         "id": 10,
         "title": "Resident Evil 3 Remake",
         "genre": "Survival Horror",
-        "year": 2020
+        "year": 2020,
+        "developerId":5
     },
     {
         "id": 11,
         "title": "Resident Evil 4 Remake",
         "genre": "Survival Horror",
-        "year": 2023
+        "year": 2023,
+        "developerId":5
     },
     {
         "id": 12,
         "title": "Resident Evil 5",
         "genre": "Survival Horror",
-        "year": 2009
+        "year": 2009,
+        "developerId":5
     },
     {
         "id": 13,
         "title": "Resident Evil 6",
         "genre": "Survival Horror",
-        "year": 2012
+        "year": 2012,
+        "developerId":5
     },
     {
         "id": 14,
         "title": "Pentiment",
         "genre": "Rpg",
-        "year": 2022
+        "year": 2022,
+        "developerId":3
     },
     {
         "id": 15,
         "title": "Hogwarts Legacy",
         "genre": "ARpg",
-        "year": 2023
+        "year": 2023,
+        "developerId":6
     },
     {
         "id": 16,
         "title": "GTA V",
         "genre": "Action",
-        "year": 2013
+        "year": 2013,
+        "developerId":7
     },
     {
         "id": 17,
         "title": "The Elder Scrolls IV",
         "genre": "Rpg",
-        "year": 2006
+        "year": 2006,
+        "developerId":8
     },
     {
         "id": 18,
         "title": "The Elder Scrolls V",
         "genre": "Rpg",
-        "year": 2011
+        "year": 2011,
+        "developerId":8
     },
     {
         "id": 19,
         "title": "Vampyr",
         "genre": "ARpg",
-        "year": 2018
+        "year": 2018,
+        "developerId":9
     },
     {
         "id": 20,
         "title": "Kingdom Come Deliverance",
         "genre": "ARpg",
-        "year": 2018
+        "year": 2018,
+        "developerId":10
     },
     {
         "id": 21,
         "title": "Red Dead Redemption 2",
         "genre": "Action",
-        "year": 2018
+        "year": 2018,
+        "developerId":7
     },
     {
         "id": 22,
         "title": "Days Gone",
         "genre": "Action",
-        "year": 2019
+        "year": 2019,
+        "developerId":11
     },
     {
         "id": 23,
         "title": "Death Stranding",
         "genre": "Action",
-        "year": 2020
+        "year": 2020,
+        "developerId":12
     },
     {
         "id": 24,
         "title": "Mass Effect",
         "genre": "ARpg",
-        "year": 2007
+        "year": 2007,
+        "developerId":13
     },
     {
         "id": 25,
         "title": "Mass Effect 2",
         "genre": "ARpg",
-        "year": 2010
+        "year": 2010,
+        "developerId":13
     },
     {
         "id": 26,
         "title": "Mass Effect 3",
         "genre": "ARpg",
-        "year": 2012
+        "year": 2012,
+        "developerId":13
     },
     {
         "id": 27,
         "title": "NieR:Automata",
         "genre": "ARpg",
-        "year": 2017
+        "year": 2017,
+        "developerId":14
     },
     {
         "id": 28,
         "title": "Final Fantasy VII Remake",
         "genre": "ARpg",
-        "year": 2020
+        "year": 2020,
+        "developerId":14
     },
     {
         "id": 29,
         "title": "Life is Strange",
         "genre": "Interactive Movie",
-        "year": 2015
+        "year": 2015,
+        "developerId":9
     },
     {
         "id": 30,
         "title": "Life is Strange: Before the Storm",
         "genre": "Interactive Movie",
-        "year": 2017
+        "year": 2017,
+        "developerId":9
     },
     {
         "id": 31,
         "title": "Life is Strange 2",
         "genre": "Interactive Movie",
-        "year": 2018
+        "year": 2018,
+        "developerId":9
     },
     {
         "id": 32,
         "title": "Life is Strange: True Colors",
         "genre": "Interactive Movie",
-        "year": 2021
+        "year": 2021,
+        "developerId":9
     },
     {
         "id": 33,
         "title": "Dead Island",
         "genre": "ARpg",
-        "year": 2011
+        "year": 2011,
+        "developerId":15
     },
     {
         "id": 34,
         "title": "Dead Island 2",
         "genre": "ARpg",
-        "year": 2023
+        "year": 2023,
+        "developerId":15
     },
     {
         "id": 35,
         "title": "Heavy Rain",
         "genre": "Interactive Movie",
-        "year": 2010
+        "year": 2010,
+        "developerId":16
     },
     {
         "id": 36,
         "title": "Dying Light",
         "genre": "Survival Horror",
-        "year": 2015
+        "year": 2015,
+        "developerId":15
     },
     {
         "id": 37,
         "title": "Dying Light 2: Stay Human",
         "genre": "Survival Horror",
-        "year": 2022
+        "year": 2022,
+        "developerId":15
     },
     {
         "id": 38,
         "title": "Horizon Zero Dawn",
         "genre": "ARpg",
-        "year": 2015
+        "year": 2015,
+        "developerId":17
     },
     {
         "id": 39,
         "title": "Horizon Forbidden West",
         "genre": "ARpg",
-        "year": 2022
+        "year": 2022,
+        "developerId":17
     },
     {
         "id": 40,
         "title": "Disco Elysium",
         "genre": "Rpg",
-        "year": 2019
+        "year": 2019,
+        "developerId":18
     },
     {
         "id": 41,
         "title": "Resident Evil 7",
         "genre": "Survival Horror",
-        "year": 2017
+        "year": 2017,
+        "developerId":5
     },
     {
         "id": 42,
         "title": "Resident Evil:Village",
         "genre": "Survival Horror",
-        "year": 2021
+        "year": 2021,
+        "developerId":5
     },
     {
         "id": 43,
         "title": "Control",
         "genre": "Action",
-        "year": 2019
+        "year": 2019,
+        "developerId":19
     },
     {
         "id": 44,
         "title": "Dragon Age:Origins",
         "genre": "Rpg",
-        "year": 2009
+        "year": 2009,
+        "developerId":13
     },
     {
         "id": 45,
         "title": "Dragon Age 2",
         "genre": "Rpg",
-        "year": 2011
+        "year": 2011,
+        "developerId":13
     },
     {
         "id": 46,
         "title": "Dragon Age:Inquisition",
         "genre": "Rpg",
-        "year": 2014
+        "year": 2014,
+        "developerId":13
     },
     {
         "id": 47,
         "title": "Elden Ring",
         "genre": "ARpg",
-        "year": 2022
+        "year": 2022,
+        "developerId":20
     }
 ]
