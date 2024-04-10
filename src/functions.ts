@@ -1,3 +1,5 @@
+import { GameQueryModel } from './models/GameQueryModel'
+import { GameSearchModel } from './models/GameSearchModel'
 import { game } from './types'
 export const gameFunctions = {
     findByTerm(games: game[], year?: string, genre?: string, title?: string) {
@@ -15,4 +17,20 @@ export const gameFunctions = {
         }
         return foundedGames
     }
+}
+export const setQueryConditions = (query: GameQueryModel) => {
+    let conditions = []
+    if (query.title) {
+        conditions.push({ title: { $regex: query.title } })
+    }
+    if (query.genre) {
+        conditions.push({ genre: query.genre })
+    }
+    if (query.year) {
+        conditions.push({ year: +query.year })
+    }
+    if (query.devId) {
+        conditions.push({ developerId: +query.devId })
+    }
+    return conditions.length ? { $and: conditions } : {}
 }

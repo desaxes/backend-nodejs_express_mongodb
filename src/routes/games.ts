@@ -18,7 +18,7 @@ export const getGamesRouter = () => {
     router.get('/',
         async (req: RequestWithQuery<GameQueryModel>, res: Response<any>) => {
             try {
-                let games = await gamesService.getGames(req.query.year, req.query.genre, req.query.title, req.query.limit, req.query.page)
+                let games = await gamesService.getGames(req.query)
                 res.json(games).status(200)
             }
             catch (e) {
@@ -26,7 +26,7 @@ export const getGamesRouter = () => {
             }
         })
     router.get('/:id',
-        async (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel|{}>) => {
+        async (req: RequestWithParams<URIParamsModel>, res: Response<GameViewModel | {}>) => {
             try {
                 const game = await gamesService.getGameById(req.params.id)
                 res.json(game).status(200)
@@ -41,7 +41,7 @@ export const getGamesRouter = () => {
         inputValidationMiddleware,
         async (req: RequestWithBody<GameCreateModel>, res: Response<InsertOneResult>) => {
             try {
-                const newGame = await gamesService.createGame(req.body.title, req.body.genre, req.body.year)
+                const newGame = await gamesService.createGame(req.body.title, req.body.genre, req.body.year, req.body.devId)
                 res.status(StatusCodes.CREATED).json(newGame)
             }
             catch (e) {
@@ -68,7 +68,7 @@ export const getGamesRouter = () => {
         inputValidationMiddleware,
         async (req: RequestWithParamsBody<URIParamsModel, GameUpdateModel>, res: Response<UpdateResult>) => {
             try {
-                const updateGame = await gamesService.updateGame(req.params.id, req.body.title, req.body.genre, req.body.year)
+                const updateGame = await gamesService.updateGame(req.params.id, req.body.title, req.body.genre, req.body.year, req.body.devId)
                 res.json(updateGame).status(StatusCodes.OK)
             }
             catch (e) {

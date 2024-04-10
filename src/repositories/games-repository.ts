@@ -31,7 +31,7 @@ export const gameRepository = {
             return {}
         }
     },
-    async createGame(title: string, genre: string, year: number) {
+    async createGame(title: string, genre: string, year: number, devId: number) {
         const games = await gameDb.find({}).toArray()
         let lastId = games[games.length - 1].id + 1
         const newGame = await gameDb.insertOne(
@@ -39,20 +39,22 @@ export const gameRepository = {
                 id: lastId,
                 title: title,
                 genre: genre,
-                year: year
+                year: year,
+                developerId: devId
             })
         return newGame
     },
     async removeGame(id: string) {
         await gameDb.deleteOne({ id: parseInt(id) })
     },
-    async updateGame(id: string, title: string, genre: string, year: number) {
+    async updateGame(id: string, title: string, genre: string, year: number, devId: number) {
         const updateGame = await gameDb.updateOne({ id: parseInt(id) },
             {
                 $set: {
                     title: title,
                     genre: genre,
-                    year: year
+                    year: year,
+                    developerId: devId
                 }
             }
         )

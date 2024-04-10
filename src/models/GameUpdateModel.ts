@@ -3,12 +3,16 @@ export type GameUpdateModel = {
      * Game title
      */
     title: string,
-        /**
-     * Game genre
-     */
+    /**
+ * Game genre
+ */
     genre: string,
-        /**
-     * Game year
-     */
-    year: number
+    /**
+ * Game year
+ */
+    year: number,
+    /**
+* DeveloperId
+*/
+    devId: number
 }
