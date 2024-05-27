@@ -4,17 +4,21 @@ import { conditionsType } from '../types'
 
 export const gameRepository = {
     async getGames(finalConditions: conditionsType, limit: number, offset: number) {
-        const games = await gameDb.find<GameSearchModel>(finalConditions).skip(offset).limit(limit).toArray()
+        const gamesCounter = (await gameDb.find<GameSearchModel>(finalConditions).toArray()).length
+        const games = await gameDb.find<GameSearchModel>(finalConditions).sort({ title: 1 }).skip(offset).limit(limit).toArray()
         const devs = await devDb.find().toArray()
-        return games.map(e => {
-            let developer = devs.find(d => d.id === e.developerId)
-            return {
-                title: e.title,
-                genre: e.genre,
-                year: e.year,
-                developer: developer && developer.name
-            }
-        })
+        return {
+            games: games.map(e => {
+                let developer = devs.find(d => d.id === e.developerId)
+                return {
+                    title: e.title,
+                    genre: e.genre,
+                    year: e.year,
+                    developer: developer && developer.name
+                }
+            }),
+            total: gamesCounter
+        }
     },
     async getGameById(id: string) {
         const game = await gameDb.findOne<GameSearchModel | null>({ id: parseInt(id) })

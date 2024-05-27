@@ -5,6 +5,16 @@ export type game = {
 export type dbType = {
     games: game[]
 }
+export type mailOptions = {
+    auth: {
+        user: string,
+        pass: string
+    },
+    from: string,
+    to: string,
+    subject: string,
+    html: string
+}
 export type conditionsType = {
     $and: (
         { title: { $regex: string; }; genre?: undefined; year?: undefined; developerId?: undefined } |
