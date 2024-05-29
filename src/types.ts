@@ -22,3 +22,17 @@ export type conditionsType = {
         { year: number; title?: undefined; genre?: undefined; developerId?: undefined } |
         { developerId: number; title?: undefined; genre?: undefined; year?: undefined })[];
 } | { $and?: undefined; }
+
+
+export type user = {
+    accountData: {
+        login: string,
+        email: string,
+        password: string,
+        createdAt: Date
+    }
+    emailConfirmation: {
+        code: number,
+        isConfirmed: boolean
+    }
+}
